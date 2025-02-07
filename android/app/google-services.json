@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299976105843",
+    "project_id": "vox-city",
+    "storage_bucket": "vox-city.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299976105843:android:43f1304cc19a452e26af06",
+        "android_client_info": {
+          "package_name": "com.example.voxcity"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6j19n2b6N7XmlvsGv_dOFmmGWo0lPTDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
