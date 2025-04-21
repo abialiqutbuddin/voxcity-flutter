@@ -12,7 +12,6 @@ class BookingPage extends StatefulWidget {
 
 class BookingPageState extends State<BookingPage> {
   final TextEditingController bookingDetailsController = TextEditingController();
-
   bool isLoading = false;
 
   void handleBooking() async {
@@ -23,23 +22,25 @@ class BookingPageState extends State<BookingPage> {
         isLoading = true;
       });
 
-      // Send data to the API
-      final result = await Wave.sendBookingData(emailTemplate: details,optionId: '96');
+      final result = await Wave.sendBookingData(emailTemplate: details, optionId: '96');
 
       setState(() {
         isLoading = false;
       });
 
-      // Show the result
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(result['success'] ? 'Success' : 'Error'),
-          content: Text(result['message']),
+          backgroundColor: const Color(0xFF1F1F2A),
+          title: Text(
+            result['success'] ? 'Success' : 'Error',
+            style: const TextStyle(color: Colors.white),
+          ),
+          content: Text(result['message'], style: const TextStyle(color: Colors.white70)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: const Text('OK', style: TextStyle(color: Colors.blueAccent)),
             ),
           ],
         ),
@@ -52,12 +53,13 @@ class BookingPageState extends State<BookingPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Error'),
-          content: Text(error.toString()),
+          backgroundColor: const Color(0xFF1F1F2A),
+          title: const Text('Error', style: TextStyle(color: Colors.white)),
+          content: Text(error.toString(), style: const TextStyle(color: Colors.white70)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: const Text('OK', style: TextStyle(color: Colors.redAccent)),
             ),
           ],
         ),
@@ -67,29 +69,40 @@ class BookingPageState extends State<BookingPage> {
 
   @override
   Widget build(BuildContext context) {
+    const bgColor = Color(0xFF12121A);
+    const cardColor = Color(0xFF1F1F2A);
+    const accentColor = Colors.blueAccent;
+
     return Scaffold(
+      backgroundColor: bgColor,
       appBar: AppBar(
-        leading: IconButton(icon:
-        const Icon(Icons.keyboard_backspace_rounded), onPressed: () {
-          Get.find<GlobalController>().updatePageIndex(3); // Navigate to Hidden Page 1
-        },
-        ),
-        title: const Text('Big Bus Booking Form'),
         backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.keyboard_backspace_rounded, color: Colors.white70),
+          onPressed: () {
+            Get.find<GlobalController>().updatePageIndex(3);
+          },
+        ),
+        title: const Text(
+          'Walker Booking Form',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header Section
+                // Header
                 const Text(
                   'Submit Booking',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 28,
                     fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -97,49 +110,57 @@ class BookingPageState extends State<BookingPage> {
                   'Paste the booking details below and submit the form.',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: Colors.white54,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 24),
 
-                // Input Section
-                Card(
-                  shape: RoundedRectangleBorder(
+                // Booking Details Input
+                Container(
+                  decoration: BoxDecoration(
+                    color: cardColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TextField(
-                      controller: bookingDetailsController,
-                      maxLines: 10,
-                      decoration: const InputDecoration(
-                        labelText: 'Paste Booking Details',
-                        alignLabelWithHint: true,
-                        border: OutlineInputBorder(),
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    controller: bookingDetailsController,
+                    maxLines: 12,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'Paste Booking Details',
+                      labelStyle: const TextStyle(color: Colors.white70),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.white24),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(color: Colors.blueAccent),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 28),
 
                 // Submit Button
                 Center(
-                  child: ElevatedButton(
-                    onPressed: isLoading ? null : handleBooking,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueGrey,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                        horizontal: 24.0,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    child: ElevatedButton.icon(
+                      onPressed: isLoading ? null : handleBooking,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: accentColor,
+                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      icon: const Icon(Icons.send_rounded, color: Colors.white),
+                      label: const Text(
+                        'Submit Booking',
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
-                    ),
-                    child: const Text(
-                      'Submit Booking',
-                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ),
@@ -150,10 +171,11 @@ class BookingPageState extends State<BookingPage> {
           // Loading Overlay
           if (isLoading)
             Container(
-              color: Colors.black54,
+              color: Colors.black.withOpacity(0.5),
               child: const Center(
                 child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  color: Colors.white,
+                  strokeWidth: 3,
                 ),
               ),
             ),

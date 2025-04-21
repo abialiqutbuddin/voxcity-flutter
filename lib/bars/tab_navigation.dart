@@ -14,6 +14,7 @@ import 'package:voxcity/screens/ym/ym_wave.dart';
 import 'package:voxcity/screens/ym/ym_zendesk_screen.dart';
 
 import '../controller/screen_index.dart';
+import '../screens/vox/zendesk.dart';
 
 class TabNavigationScreen extends StatelessWidget {
   final GlobalController pageController = Get.put(GlobalController());
@@ -24,32 +25,30 @@ class TabNavigationScreen extends StatelessWidget {
     {
       "icon": FontAwesomeIcons.v,
       "subpages": [
-        {
-          "icon": FontAwesomeIcons.whatsapp,
-          "page": const WebWhatsAppScreen(),
-        },
-        {
-          "icon": FontAwesomeIcons.z,
-          "page": const ZendeskScreen(),
-        },
-        {
-          "icon": FontAwesomeIcons.w,
-          "page": const VoxWave(),
-        },
+        // {
+        //   "icon": FontAwesomeIcons.whatsapp,
+        //   "page": const WebWhatsAppScreen(),
+        // },
+        // {
+        //   "icon": FontAwesomeIcons.z,
+        //   "page": const ZendeskScreen(),
+        // },
+        // {
+        //   "icon": FontAwesomeIcons.w,
+        //   "page": const VoxWave(),
+        // },
         {
           "icon": FontAwesomeIcons.ticket,
           "page": const BookingForecastScreen(),
         },
         // Hidden pages
         {
-          "icon": null,
+          "icon": FontAwesomeIcons.personWalking,
           "page": const BookingPage(),
-          "hidden": true,
         },
         {
-          "icon": null,
+          "icon": FontAwesomeIcons.bus,
           "page": const BigBusBookingPage(),
-          "hidden": true,
         },
         {
           "icon": Icons.book,
@@ -61,36 +60,39 @@ class TabNavigationScreen extends StatelessWidget {
               optionId: productPageId,
             );
           }),
-          "hidden": true,
         },
-      ],
-    },
-    {
-      "icon": FontAwesomeIcons.y,
-      "subpages": [
         {
           "icon": FontAwesomeIcons.z,
-          "page": const YMZendeskScreen(),
-        },
-        {
-          "icon": FontAwesomeIcons.w,
-          "page": const YMWave(),
+          "page": TicketsScreen(),
         },
       ],
     },
-    {
-      "icon": FontAwesomeIcons.chrome,
-      "subpages": [
-        {
-          "icon": FontAwesomeIcons.slack,
-          "page": const SlackScreen(),
-        },
-        {
-          "icon": FontAwesomeIcons.searchengin,
-          "page": const ModernBrowser(),
-        },
-      ],
-    },
+    // {
+    //   "icon": FontAwesomeIcons.y,
+    //   "subpages": [
+    //     {
+    //       "icon": FontAwesomeIcons.z,
+    //       "page": const YMZendeskScreen(),
+    //     },
+    //     {
+    //       "icon": FontAwesomeIcons.w,
+    //       "page": const YMWave(),
+    //     },
+    //   ],
+    // },
+    // {
+    //   "icon": FontAwesomeIcons.chrome,
+    //   "subpages": [
+    //     {
+    //       "icon": FontAwesomeIcons.slack,
+    //       "page": const SlackScreen(),
+    //     },
+    //     {
+    //       "icon": FontAwesomeIcons.searchengin,
+    //       "page": const ModernBrowser(),
+    //     },
+    //   ],
+    // },
   ];
 
   @override

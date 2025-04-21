@@ -99,6 +99,20 @@ class WebWhatsAppScreenState extends State<WebWhatsAppScreen>
             title: 'Vox Zendesk',
             actions: [
               IconButton(
+                tooltip: 'Copy Chats',
+                icon: const Icon(Icons.copy_rounded, color: Colors.white),
+                onPressed: () async {
+                  if (_webViewController != null) {
+                    //await view_controller.extractWhatsAppChat(_webViewController!);
+                    //view_controller.copyWhatsAppChatHtml(_webViewController!);
+                    //view_controller.openWhatsAppChat(_webViewController!,'+30 698 480 0771');
+                    viewController.listenToChatListChanges(_webViewController!);
+                    await viewController.insertHiddenLink('306984800771', '');
+                    viewController.clickHiddenLink('306984800771', '');
+                  }
+                },
+              ),
+              IconButton(
                 tooltip: 'Refresh',
                 icon: const Icon(Icons.refresh, color: Colors.white),
                 onPressed: () {

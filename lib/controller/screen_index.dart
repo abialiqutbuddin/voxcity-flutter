@@ -79,7 +79,7 @@ class GlobalController extends GetxController {
     final insertLinkScript = """
 (function() {
   // Select the "Chats" container div
-  const chatsContainer = document.querySelector('div[title="Chats"]');
+  const chatsContainer = document.querySelector('div[title="Chat"]');
   if (chatsContainer) {
     // Check if the hidden link already exists
     let hiddenLink = chatsContainer.querySelector('a.hidden-whatsapp-link');
@@ -125,5 +125,56 @@ class GlobalController extends GetxController {
       }
     """;
     await webViewController!.evaluateJavascript(source: clickLinkScript);
+  }
+
+  Future<void> listenToChatListChanges(InAppWebViewController controller) async {
+    String jsCode = """
+    (function() {
+        let chatList = document.querySelector("div.x1ja2u2z"); // WhatsApp Chat List Container
+
+        if (!chatList) {
+            console.log("❌ Chat list container not found!");
+            return;
+        }
+
+        // Callback function when a mutation is detected
+        function chatListObserverCallback(mutationsList, observer) {
+            mutationsList.forEach(mutation => {
+                if (mutation.type === "childList") {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeType === 1) { // Element Node
+                            console.log("🟢 New chat added: ", node.innerText);
+                        }
+                    });
+
+                    mutation.removedNodes.forEach(node => {
+                        if (node.nodeType === 1) {
+                            console.log("🔴 Chat removed: ", node.innerText);
+                        }
+                    });
+                }
+
+                if (mutation.type === "attributes") {
+                    console.log("🟡 Chat updated: ", mutation.target.innerText);
+                }
+            });
+        }
+
+        // Create a MutationObserver
+        let observer = new MutationObserver(chatListObserverCallback);
+
+        // Start observing the chat list container for changes
+        observer.observe(chatList, { childList: true, attributes: true, subtree: true });
+
+        console.log("✅ Listening for WhatsApp Chat List updates...");
+    })();
+  """;
+
+    try {
+      await controller.evaluateJavascript(source: jsCode);
+      print("✅ Chat list listener started successfully.");
+    } catch (e) {
+      print("⚠️ Error starting chat list listener: $e");
+    }
   }
 }

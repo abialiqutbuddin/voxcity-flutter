@@ -169,6 +169,20 @@ class CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
                       },
                     ),
                     ElevatedButton.icon(
+                      icon: const Icon(Icons.send, color: Colors.white),
+                      label: const Text("Send All via Zendesk"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        sendBulkTickets();
+                      },
+                    ),
+
+                    ElevatedButton.icon(
                       icon: const Icon(Icons.call_split_rounded,
                           color: Colors.white),
                       label: const Text("Split Tickets"),
@@ -384,6 +398,27 @@ class CustomerDetailsScreenState extends State<CustomerDetailsScreen> {
         ],
       ),
     );
+  }
+
+  void sendBulkTickets() async {
+    updateLoadingState(true); // Show loading spinner
+
+    for (var customer in customers) {
+      print("📤 Processing customer: ${customer['guestName']}");
+
+      try {
+        controller.handleOnPressed(
+          customer,
+          'email',
+          context,
+          updateLoadingState,
+        );
+      } catch (e) {
+        print("❌ Error processing ${customer['guestName']}: ${e.toString()}");
+      }
+    }
+    updateLoadingState(false); // Hide loading spinner
+    print("🎉 Bulk ticket sending complete!");
   }
 
   void _openDirectoryDialog(BuildContext context, String folderId,

@@ -80,7 +80,7 @@ class BookingForecastScreenState extends State<BookingForecastScreen>
     final optionId = uri.queryParameters['option_id'] ?? '';
     Get.find<GlobalController>().updateProductPageIdAndDate(optionId, date);
     Get.find<GlobalController>().toggleProductPage(true);
-    Get.find<GlobalController>().updatePageIndex(6);
+    Get.find<GlobalController>().updatePageIndex(3);
   }
 
   bool isHovering = false;
@@ -101,7 +101,8 @@ class BookingForecastScreenState extends State<BookingForecastScreen>
           },
         ),
       ),
-      body: Row(
+      body:
+      Row(
         children: [
           Container(
             decoration: const BoxDecoration(
@@ -112,90 +113,87 @@ class BookingForecastScreenState extends State<BookingForecastScreen>
             width: 50,
             child: Column(
               children: [
+                // GestureDetector(
+                //   onTap: () {
+                //     Get.find<GlobalController>()
+                //         .updatePageIndex(4); // Navigate to Hidden Page 1
+                //   },
+                //   child: MouseRegion(
+                //     cursor: SystemMouseCursors.click, // Change pointer on hover
+                //     onEnter: (_) {
+                //       setState(() {
+                //         isHoveringW = true;
+                //       });
+                //     },
+                //     onExit: (_) {
+                //       setState(() {
+                //         isHoveringW = false;
+                //       });
+                //     },
+                //     child: AnimatedContainer(
+                //       duration: const Duration(
+                //           milliseconds: 100), // Smooth zoom animation
+                //       width: isHoveringW ? 35 : 30, // Slight zoom on hover
+                //       height: isHoveringW ? 35 : 30, // Slight zoom on hover
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(5),
+                //       ),
+                //       child: ClipRRect(
+                //         borderRadius: BorderRadius.circular(
+                //             5), // Match the Container's border radius
+                //         child: Image.asset(
+                //           "assets/walkers.png",
+                //           fit: BoxFit.contain,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Get.find<GlobalController>()
-                        .updatePageIndex(4); // Navigate to Hidden Page 1
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click, // Change pointer on hover
-                    onEnter: (_) {
-                      setState(() {
-                        isHoveringW = true;
-                      });
-                    },
-                    onExit: (_) {
-                      setState(() {
-                        isHoveringW = false;
-                      });
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(
-                          milliseconds: 100), // Smooth zoom animation
-                      width: isHoveringW ? 35 : 30, // Slight zoom on hover
-                      height: isHoveringW ? 35 : 30, // Slight zoom on hover
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            5), // Match the Container's border radius
-                        child: Image.asset(
-                          "assets/walkers.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => const BigBusBookingPage(),
-                    //   ),
-                    // );
-                    Get.find<GlobalController>()
-                        .updatePageIndex(5); // Navigate to Hidden Page 1
-                  },
-                  child: MouseRegion(
-                    cursor: SystemMouseCursors.click, // Change pointer on hover
-                    onEnter: (_) {
-                      setState(() {
-                        isHovering = true;
-                      });
-                    },
-                    onExit: (_) {
-                      setState(() {
-                        isHovering = false;
-                      });
-                    },
-                    child: AnimatedContainer(
-                      duration: const Duration(
-                          milliseconds: 100), // Smooth zoom animation
-                      width: isHovering ? 35 : 30, // Slight zoom on hover
-                      height: isHovering ? 35 : 30, // Slight zoom on hover
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            5), // Match the Container's border radius
-                        child: Image.asset(
-                          "assets/big-bus.png",
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     // Navigator.push(
+                //     //   context,
+                //     //   MaterialPageRoute(
+                //     //     builder: (context) => const BigBusBookingPage(),
+                //     //   ),
+                //     // );
+                //     Get.find<GlobalController>()
+                //         .updatePageIndex(5); // Navigate to Hidden Page 1
+                //   },
+                //   child: MouseRegion(
+                //     cursor: SystemMouseCursors.click, // Change pointer on hover
+                //     onEnter: (_) {
+                //       setState(() {
+                //         isHovering = true;
+                //       });
+                //     },
+                //     onExit: (_) {
+                //       setState(() {
+                //         isHovering = false;
+                //       });
+                //     },
+                //     child: AnimatedContainer(
+                //       duration: const Duration(
+                //           milliseconds: 100), // Smooth zoom animation
+                //       width: isHovering ? 35 : 30, // Slight zoom on hover
+                //       height: isHovering ? 35 : 30, // Slight zoom on hover
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(5),
+                //       ),
+                //       child: ClipRRect(
+                //         borderRadius: BorderRadius.circular(
+                //             5), // Match the Container's border radius
+                //         child: Image.asset(
+                //           "assets/big-bus.png",
+                //           fit: BoxFit.contain,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -309,8 +307,7 @@ class BookingForecastScreenState extends State<BookingForecastScreen>
                                 ? const Icon(Icons.notifications_active,
                                     color: Colors.red)
                                 : null,
-                            onTap: () {
-                              openCustomerDetails(product['detailLink']);
+                            onTap: () {openCustomerDetails(product['detailLink']);
                             },
                           );
                         }).toList(),

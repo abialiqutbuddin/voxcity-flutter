@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_selector/file_selector.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class WhatsappWebController {
@@ -122,5 +123,155 @@ class WhatsappWebController {
     """;
      await controller.evaluateJavascript(source: jsCode);
    }
+
+
+   Future<void> extractWhatsAppChat(InAppWebViewController controller) async {
+     String jsCode = """
+// Function to extract WhatsApp Web chat list
+function extractChatList() {
+    let chats = [];
+    
+    // Select all chat list elements
+    let chatElements = document.querySelectorAll("div.x10l6tqk.xh8yej3.x1g42fcv");
+
+    chatElements.forEach(chat => {
+        try {
+            // Extract chat name
+            let nameTag = chat.querySelector("span.x1iyjqo2");
+            let chatName = nameTag ? nameTag.textContent.trim() : "Unknown";
+
+            // Extract message preview
+            let messageTag = chat.querySelector("span.x78zum5");
+            let message = messageTag ? messageTag.textContent.trim() : "No message";
+
+            // Extract timestamp
+            let timestampTag = chat.querySelector("div._ak8i");
+            let timestamp = timestampTag ? timestampTag.textContent.trim() : "Unknown";
+
+            // Extract sender (if available)
+            let senderTag = chat.querySelector("span.x1rg5ohu");
+            let sender = senderTag ? senderTag.textContent.trim() : "Unknown";
+
+            // Extract unread messages count (if available)
+            let unreadTag = chat.querySelector("span.x1rg5ohu.x1xaadd7.x1pg5gke.xo5v014.x1u28eo4.x2b8uid.x16dsc37.x18ba5f9.x1sbl2l.xy9co9w.x5r174s.x7h3shv.x1tsellj.x682dto.x1e01kqd.xpqt37d.x9bpaai.xk50ysn");
+            let unreadCount = unreadTag ? unreadTag.textContent.trim() : "0";
+
+            // Determine read/unread status
+            let readStatus = parseInt(unreadCount) > 0 ? "Unread" : "Read";
+
+            // Append extracted data
+            chats.push({
+                "chat_name": chatName,
+                "message": message,
+                "timestamp": timestamp,
+                "sender": sender,
+                "unread_count": unreadCount,
+                "status": readStatus
+            });
+        } catch (error) {
+            console.error("Error extracting chat data:", error);
+        }
+    });
+
+    console.log("Extracted chat list:", chats);
+    return chats;
+}
+
+// Run the function and store the extracted data
+let chatData = extractChatList();
+  """;
+
+     try {
+       // Execute JavaScript in WebView
+       var extractedHtml = await controller.evaluateJavascript(source: jsCode);
+
+       if (extractedHtml != null && extractedHtml.isNotEmpty && !extractedHtml.contains("Chat block not found")) {
+         // Copy extracted HTML to clipboard
+         await Clipboard.setData(ClipboardData(text: extractedHtml));
+         print("✅ WhatsApp chat HTML copied to clipboard!");
+       } else {
+         print("❌ Failed to extract chat HTML.");
+       }
+     } catch (e) {
+       print("⚠️ Error extracting chat: $e");
+     }
+   }
+   Future<void> copyWhatsAppChatHtml(InAppWebViewController controller) async {
+     String jsCode = """
+    (function() {
+        let chatMessages = document.querySelectorAll("div.x10l6tqk.xh8yej3.x1g42fcv");
+
+        if (!chatMessages.length) {
+            return "Chat messages not found! Ensure you are on WhatsApp Web and inside a chat.";
+        }
+
+        // Create a wrapper div to store extracted messages
+        let wrapperDiv = document.createElement("div");
+        
+        chatMessages.forEach(chat => {
+            wrapperDiv.appendChild(chat.cloneNode(true)); // Clone each chat message div
+        });
+
+        return wrapperDiv.innerHTML; // Get all chat messages as HTML
+    })();
+  """;
+
+     try {
+       // Execute JavaScript to extract chat HTML
+       var extractedHtml = await controller.evaluateJavascript(source: jsCode);
+
+       if (extractedHtml != null && extractedHtml.isNotEmpty && !extractedHtml.contains("Chat HTML not found")) {
+         // Copy extracted HTML to clipboard
+         await Clipboard.setData(ClipboardData(text: extractedHtml));
+         print("✅ WhatsApp chat HTML copied to clipboard! Length: ${extractedHtml.length}");
+       } else {
+         print("❌ Failed to extract chat HTML: Make sure you're inside a chat.");
+       }
+     } catch (e) {
+       print("⚠️ Error extracting chat HTML: $e");
+     }
+   }
+
+   Future<void> openWhatsAppChat(InAppWebViewController controller, String chatName) async {
+     String jsCode = """
+    (function() {
+        let chatElements = document.querySelectorAll("div.x10l6tqk.xh8yej3.x1g42fcv");
+
+        if (!chatElements.length) {
+            return "❌ No chats found! Ensure you are on WhatsApp Web.";
+        }
+
+        for (let chat of chatElements) {
+            let nameTag = chat.querySelector("span.x1iyjqo2");
+            let nameText = nameTag ? nameTag.textContent.trim() : null;
+
+            if (nameText && nameText.toLowerCase() === "${chatName.toLowerCase()}") {
+                // Create a proper simulated click event
+                let event = new MouseEvent('mousedown', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window
+                });
+                
+                chat.dispatchEvent(event); // Simulate the click event
+
+                return "✅ Opened chat: " + nameText;
+            }
+        }
+
+        return "❌ Chat with name '${chatName}' not found!";
+    })();
+  """;
+
+     try {
+       // Execute JavaScript to find and open the chat
+       var result = await controller.evaluateJavascript(source: jsCode);
+
+       print(result); // Log the result
+     } catch (e) {
+       print("⚠️ Error opening chat: $e");
+     }
+   }
+
 
 }

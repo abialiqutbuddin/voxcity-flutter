@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 class ProductBookingsController {
 
-  final Set<String> linkMessageOptionIds = {'844', '778', '780','841','914','884','899', '928'};
+  final Set<String> linkMessageOptionIds = {'844', '778', '780','841','914','884','899', '928','786'};
   List<Map<String, dynamic>> customers = [];
   String? downloadedFilePath;
   Uint8List? pdfData;
@@ -127,10 +127,13 @@ class ProductBookingsController {
       String messageText = await formatMessage(messageTemplate, replacements);
 
       if (purpose == 'email') {
-        await Wave.sendEmail(
-            recipientEmail: email,
-            subject: 'URGENT: Regarding Your Booking',
-            message: messageText);
+
+        bool success = await Wave.sendZendeskTicket(customerName, email, messageText);
+
+        // await Wave.sendEmail(
+        //     recipientEmail: email,
+        //     subject: 'URGENT: Regarding Your Booking',
+        //     message: messageText);
 
         updateLoadingState(false); // Trigger loading state
         ScaffoldMessenger.of(context).showSnackBar(
@@ -140,11 +143,11 @@ class ProductBookingsController {
       }
 
       await Clipboard.setData(ClipboardData(text: messageText));
-      final GlobalController viewController = Get.find<GlobalController>();
-      viewController.updatePageIndex(0); // Navigate to Hidden Page 1
-      messageText = Uri.encodeComponent(messageText);
-      await viewController.insertHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),messageText);
-      viewController.clickHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),Uri.encodeComponent(messageText));
+      //final GlobalController viewController = Get.find<GlobalController>();
+      //viewController.updatePageIndex(0); // Navigate to Hidden Page 1
+      //messageText = Uri.encodeComponent(messageText);
+      //await viewController.insertHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),messageText);
+      //viewController.clickHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),Uri.encodeComponent(messageText));
       updateLoadingState(false); // Trigger loading state
     } catch (e) {
       updateLoadingState(false); // Trigger loading state
@@ -214,10 +217,11 @@ class ProductBookingsController {
       String messageText = await formatMessage(messageTemplate, replacements);
 
       if (purpose == 'email') {
-        await Wave.sendEmail(
-            recipientEmail: email,
-            subject: 'URGENT: Regarding Your Booking',
-            message: messageText);
+        bool success = await Wave.sendZendeskTicket(customerName, email, messageText);
+        // await Wave.sendEmail(
+        //     recipientEmail: email,
+        //     subject: 'URGENT: Regarding Your Booking',
+        //     message: messageText);
         updateLoadingState(false); // Trigger loading state
         ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Email sent with template")));
@@ -225,11 +229,11 @@ class ProductBookingsController {
         return;
       }
       await Clipboard.setData(ClipboardData(text: messageText));
-      final GlobalController viewController = Get.find<GlobalController>();
-      viewController.updatePageIndex(0); // Navigate to Hidden Page 1
-      messageText = Uri.encodeComponent(messageText);
-      await viewController.insertHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),messageText);
-      viewController.clickHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),Uri.encodeComponent(messageText));
+      //final GlobalController viewController = Get.find<GlobalController>();
+      //viewController.updatePageIndex(0); // Navigate to Hidden Page 1
+      //messageText = Uri.encodeComponent(messageText);
+      //await viewController.insertHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),messageText);
+      //viewController.clickHiddenLink(phone.replaceAll(RegExp(r'[-+\s]'), ''),Uri.encodeComponent(messageText));
       updateLoadingState(false); // Trigger loading state
     } catch (e) {
       updateLoadingState(false); // Trigger loading state
@@ -326,4 +330,5 @@ class ProductBookingsController {
       log("$e");
     }
   }
+
 }
